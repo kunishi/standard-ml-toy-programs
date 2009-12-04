@@ -16,5 +16,21 @@ fun compare x y =
     else if x > y then GREATER
     else EQUAL;
 
+(* input functions *)
+
+fun split s = String.tokens (fn c => c = #" ") s;
+
+fun readproblem filename =
+    let
+      open TextIO
+      val a = openIn filename
+      val b = ref "" 
+      fun read_sub NONE = ()
+        | read_sub (SOME s) = (output (stdOut, s); read_sub (inputLine a))
+    in
+      read_sub (inputLine a);
+      closeIn a
+    end;
+ 
 fun prob l m = block (List.rev (sort compare l))
                      (List.rev (sort compare m));
