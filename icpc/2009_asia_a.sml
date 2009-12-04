@@ -19,16 +19,22 @@ fun compare x y =
 (* input functions *)
 
 fun split s = String.tokens (fn c => c = #" ") s;
+fun toIntList l = List.map (fn s => valOf (Int.fromString s)) l;
 
 fun readproblem filename =
     let
       open TextIO
       val a = openIn filename
-      val b = ref "" 
-      fun read_sub NONE = ()
-        | read_sub (SOME s) = (output (stdOut, s); read_sub (inputLine a))
+      val b = ref NONE 
     in
-      read_sub (inputLine a);
+      while (b := inputLine a; !b <> SOME "0 0\n") do 
+	      let
+	         val wd = valOf(!b)
+		 val l = toIntList (split (valOf (inputLine a)))
+		 val m = toIntList (split (valOf (inputLine a)))
+              in
+	         output (stdOut, Int.toString (prob l m))
+              end;
       closeIn a
     end;
  
