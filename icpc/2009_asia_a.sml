@@ -1,14 +1,14 @@
 fun block nil nil = 0
  |  block (x::xs) nil = x
  |  block nil (y::ys) = y
- |  block (X as x::xs) (Y as y::ys) =
+ |  block (xl as x::xs) (yl as y::ys) =
      if x = y then x + block xs ys
-     else if x > y then x + block xs Y
-     else y + block X ys;
+     else if x > y then x + block xs yl
+     else y + block xl ys;
 
 fun sort _ nil = nil
- |  sort f (X as x::xs) = sort f (List.filter (fn y => f y x = LESS) xs)
-                   @ (List.filter (fn y => f y x = EQUAL) X)
+ |  sort f (xl as x::xs) = sort f (List.filter (fn y => f y x = LESS) xs)
+                   @ (List.filter (fn y => f y x = EQUAL) xl)
                    @ sort f (List.filter (fn y => f y x = GREATER) xs);
 
 fun compare x y = 
@@ -16,5 +16,5 @@ fun compare x y =
     else if x > y then GREATER
     else EQUAL;
 
-fun prob L M = block (List.rev (sort compare L))
-                     (List.rev (sort compare M));
+fun prob l m = block (List.rev (sort compare l))
+                     (List.rev (sort compare m));
