@@ -1,6 +1,6 @@
 fun block nil nil = 0
- |  block (x::xs) nil = x
- |  block nil (y::ys) = y
+ |  block (x::xs) nil = x + block xs nil
+ |  block nil (y::ys) = y + block nil ys
  |  block (xl as x::xs) (yl as y::ys) =
      if x = y then x + block xs ys
      else if x > y then x + block xs yl
