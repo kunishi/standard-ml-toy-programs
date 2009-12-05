@@ -8,7 +8,7 @@ fun compare x y =
     else if x > y then GREATER
     else EQUAL;
 
-fun solve_one l m = 
+fun solve_one front side = 
     let
        fun block nil nil = 0
          | block (x::xs) nil = x + block xs nil
@@ -18,23 +18,25 @@ fun solve_one l m =
            else if x > y then x + block xs yl
            else y + block xl ys
     in
-	block (List.rev (sort compare l)) (List.rev (sort compare m))
+	block (List.rev (sort compare front)) (List.rev (sort compare side))
     end;
 
-fun solve filename =
+fun solve filename eod =
     let
 	open TextIO
-	val a = openIn filename
-	val b = ref NONE 
+	val indata = openIn filename
+	val b = ref NONE
 	fun split s = String.tokens (fn c => c = #" ") s
 	fun toIntList l = List.map (fn s => valOf (Int.fromString s)) l
     in
-	while (b := inputLine a; !b <> SOME "0 0\n") do 
+	while (b := inputLine indata; (!b) <> SOME eod) do 
 	    let
-		val l = toIntList (split (valOf (inputLine a)))
-		val m = toIntList (split (valOf (inputLine a)))
+		val front = toIntList (split (valOf (inputLine indata)))
+		val side = toIntList (split (valOf (inputLine indata)))
             in
-		output (stdOut, (Int.toString (solve_one l m)) ^ "\n")
+		output (stdOut, (Int.toString (solve_one front side)) ^ "\n")
             end;
-	closeIn a
+	closeIn indata
     end;
+
+solve "2009_asia_a_in.txt" "0 0\n"
