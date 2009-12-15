@@ -3,8 +3,8 @@ fun remove_a_stone vec i =
 	open VectorSlice
 	val size = Vector.length vec - 1
 	val newvec = 
-	    if i = 0 then concat [slice (vec, 1, SOME size)]
-	    else if i = size then concat [slice (vec, 0, SOME size)]
+	    if i = 0 then vector (slice (vec, 1, SOME size))
+	    else if i = size then vector (slice (vec, 0, SOME size))
 	    else concat [slice (vec, 0, SOME i),
 			 slice (vec, i+1, SOME (size-i))]
     in
