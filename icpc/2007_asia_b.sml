@@ -38,10 +38,12 @@ fun get_primes n =
 	List.rev (get_primes_sub l nil)
     end
 
-fun solve_one n ppairs =
-    case List.find (fn (p, q) => p <= n andalso n < q) ppairs of
-	NONE => raise NotFoundException
-      | SOME (p, q) => if n = p then p else q - p
+fun solve_one n primes ppairs =
+    case List.find (fn x => x = n) primes of
+	SOME x => x
+      | NONE => case List.find (fn (p, q) => p <= n andalso n < q) ppairs of
+		    SOME (p, q) => q - p
+		  | NONE => raise NotFoundException
 
 fun solve file =
     let
@@ -55,8 +57,11 @@ fun solve file =
 	    let
 		val n = Int.fromString (valOf (!line))
 	    in
-		output (stdOut, 
-			Int.toString (solve_one (valOf n) ppairs) ^ "\n")
+		case n of
+		    SOME v => 
+		    output (stdOut, 
+			    Int.toString (solve_one v primes ppairs) ^ "\n")
+		  | NONE => raise NotFoundException
 	    end;
 	closeIn f
     end
